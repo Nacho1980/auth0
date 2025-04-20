@@ -1,0 +1,86 @@
+.next-steps .fa-link {
+  margin-right: 5px;
+}
+
+/* Fix for use only flexbox in content area */
+.next-steps .row {
+  margin-bottom: 0;
+}
+
+.next-steps .col-md-5 {
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .next-steps .col-md-5 {
+    margin-bottom: 0;
+  }
+}
+
+.spinner {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.result-block-container .result-block {
+  opacity: 1;
+}
+
+.table-of-apps {
+  margin-top: 2rem;
+  thead th {
+    font-weight: 600;
+    background-color: #90ee90;
+    color: #212529;
+  }
+  th {
+    font-weight: 600;
+    color: #212529;
+  }
+  th,
+  td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+  }
+  tr:nth-child(odd) {
+    background-color: #f8f9fa;
+  }
+  tr:nth-child(even) {
+    background-color: #ffffff;
+  }
+  tr:hover {
+    background-color: #e9ecef;
+  }
+  th:first-child,
+  td:first-child {
+    border-left: 0;
+  }
+  th:last-child,
+  td:last-child {
+    border-right: 0;
+  }
+  th:first-child {
+    border-top-left-radius: 0.25rem;
+  }
+  th:last-child {
+    border-top-right-radius: 0.25rem;
+  }
+  td:first-child {
+    border-bottom-left-radius: 0.25rem;
+  }
+  td:last-child {
+    border-bottom-right-radius: 0.25rem;
+  }
+  th {
+    border-bottom: 2px solid #dee2e6;
+  }
+}
