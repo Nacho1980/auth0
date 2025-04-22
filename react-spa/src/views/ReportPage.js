@@ -26,24 +26,7 @@ const ReportPage = () => {
         setLoading(true);
         setError(null);
 
-        // 1. Check if the user is a Manager (redundant with backend check, but good for UI)
-        const claims = await getIdTokenClaims();
-        const roles =
-          claims && Array.isArray(claims[rolesClaimNamespace])
-            ? claims[rolesClaimNamespace]
-            : [];
-        setUserRoles(roles);
-        const manager = roles.includes(requiredRole);
-        setIsManager(manager);
-
-        // If not a manager, stop here (the backend will also deny access)
-        if (!manager) {
-          setLoading(false);
-          // You might want to set a specific "Unauthorized" state or message here
-          return;
-        }
-
-        // 2. Get the access token for YOUR backend API
+        // 1. Get the access token for YOUR backend API
         // The audience here must match AUTH0_AUDIENCE_YOUR_API in your backend .env
         const audience = config.audience; //process.env.REACT_APP_AUTH0_AUDIENCE; // Ensure your React app loads this env var
         if (!audience) {
@@ -59,8 +42,7 @@ const ReportPage = () => {
         });
         //console.log("Access Token:", accessToken); // For debugging
 
-        // 3. Call your backend endpoint
-        //const response = await fetch("/api/report/applications-actions", {
+        // 2. Call your backend endpoint
         const response = await axios.get("/api/report/applications-actions", {
           headers: {
             Authorization: `Bearer ${accessToken}`, // Include the user's token for backend authentication
@@ -68,7 +50,14 @@ const ReportPage = () => {
         });
 
         // 4. Handle backend response (check for 403 Forbidden or other errors)
-        if (response.status === 403) {
+        if (response.status === 200) {
+          setIsManager(true);
+          const result = response.data;
+          setReportData(result);
+        }
+        //console.log("Backend response:", response); // For debugging
+      } catch (err) {
+        if (err.status === 403) {
           // This handles the case where the backend denied access (e.g., role check failed)
           setError(
             new Error("Access Denied: You do not have the Manager role.")
@@ -76,14 +65,10 @@ const ReportPage = () => {
           setLoading(false);
           setIsManager(false);
           return; // Stop processing
+        } else {
+          console.error("Error fetching report data:", err);
+          setError(err);
         }
-        //console.log("Backend response:", response); // For debugging
-
-        const result = response.data;
-        setReportData(result);
-      } catch (err) {
-        console.error("Error fetching report data:", err);
-        setError(err);
         // If the error was due to not being authenticated, the HOC will redirect
       } finally {
         setLoading(false);
